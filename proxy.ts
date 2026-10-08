@@ -3,8 +3,16 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 const PUBLIC_PATHS = ['/login', '/auth/login', '/auth/callback', '/guest'];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
+
+  const { pathname } = request.nextUrl;
+  const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
+  const isGuestMode = request.cookies.get('guest_mode')?.value === 'true';
+
+  // Public pages and guest sessions do not need a Supabase session refresh.
+  // This keeps the demo usable when Supabase is not configured or reachable.
+  if (isPublic || isGuestMode) return response;
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
@@ -31,15 +39,6 @@ export async function middleware(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const { pathname } = request.nextUrl;
-
-  // Check if the user is in guest mode via cookie
-  const isGuestMode = request.cookies.get('guest_mode')?.value === 'true';
-
-  // Allow public paths through without auth check
-  const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
-  if (isPublic) return response;
 
   // Protect all non-public routes
   if (!user && !isGuestMode) {

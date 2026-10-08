@@ -372,6 +372,9 @@ function getFallbackActivities(): ClubActivity[] {
 
 // ─── getEvents ───────────────────────────────────────────────
 export async function getEvents(): Promise<ActionResponse<EventWithClub[]>> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return { success: true, data: getFallbackEvents() };
+  }
   try {
     const supabase = await createClient();
     const { data, error } = await supabase.from('events').select('*');
@@ -457,6 +460,9 @@ export async function getEvents(): Promise<ActionResponse<EventWithClub[]>> {
 
 // ─── getClubs ─────────────────────────────────────────────────
 export async function getClubs(): Promise<ActionResponse<Club[]>> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return { success: true, data: FALLBACK_CLUBS };
+  }
   try {
     const supabase = await createClient();
     const { data, error } = await supabase.from('clubs').select('*');
@@ -498,6 +504,9 @@ export async function getClubs(): Promise<ActionResponse<Club[]>> {
 
 // ─── getClubActivities ────────────────────────────────────────
 export async function getClubActivities(): Promise<ActionResponse<ClubActivity[]>> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return { success: true, data: getFallbackActivities() };
+  }
   try {
     const supabase = await createClient();
     const { data, error } = await supabase.from('club_activities').select('*');

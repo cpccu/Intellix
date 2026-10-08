@@ -155,6 +155,23 @@ export async function getResources(params?: {
   query?: string;
   category?: string;
 }): Promise<ActionResponse<Resource[]>> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    let items = FALLBACK_RESOURCES;
+    if (params?.category && params.category !== 'all') {
+      const target = normalizeCategory(params.category);
+      items = items.filter((resource) => resource.category === target);
+    }
+    if (params?.query?.trim()) {
+      const query = params.query.trim().toLowerCase();
+      items = items.filter((resource) =>
+        resource.title.toLowerCase().includes(query) ||
+        (resource.description ?? '').toLowerCase().includes(query) ||
+        (resource.course_code ?? '').toLowerCase().includes(query) ||
+        (resource.department ?? '').toLowerCase().includes(query)
+      );
+    }
+    return { success: true, data: attachDemoDocuments(items) };
+  }
   try {
     const supabase = await createClient();
     const { data, error } = await supabase.from('resources').select('*');

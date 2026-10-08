@@ -52,15 +52,15 @@ export function ResourceRow({ resource }: Props) {
   const meta = CATEGORY_META[resource.category] ?? CATEGORY_META.other;
 
   return (
-    <div className="flex items-center gap-4 px-5 py-4 hover:bg-slate-50 transition-colors">
+    <div className="group flex flex-col gap-3 px-4 py-4 transition-colors hover:bg-white/[0.025] sm:flex-row sm:items-center sm:gap-4 sm:px-5">
       {/* Category icon */}
-      <div className={`w-9 h-9 rounded-lg border flex items-center justify-center shrink-0 ${meta.classes}`}>
+      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${meta.classes}`}>
         {meta.icon}
       </div>
 
       {/* Text info */}
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-slate-900 truncate">{resource.title}</p>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-xs font-semibold text-slate-100 sm:text-sm">{resource.title}</p>
         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
           {resource.course_code && (
             <span className="text-[11px] font-mono font-medium text-slate-600 bg-slate-100 px-1.5 py-0.2 rounded border border-slate-200/80">
@@ -77,37 +77,32 @@ export function ResourceRow({ resource }: Props) {
       </div>
 
       {/* Category badge */}
-      <span
-        className={`shrink-0 inline-flex items-center px-2 py-0.5 text-[11px] font-medium border rounded-md ${meta.classes}`}
-      >
-        {meta.label}
-      </span>
+      <div className="flex items-center justify-between gap-2 border-t border-blue-100/10 pt-2 sm:border-0 sm:pt-0">
+        <span className={`inline-flex shrink-0 items-center rounded-md border px-2 py-0.5 text-[10px] font-medium ${meta.classes}`}>
+          {meta.label}
+        </span>
 
-      {/* Download action button */}
-      {resource.file_url ? (
-        <a
-          href={resource.file_url}
-          download={resource.file_url.startsWith('/') ? true : undefined}
-          target={resource.file_url.startsWith('/') ? undefined : '_blank'}
-          rel={resource.file_url.startsWith('/') ? undefined : 'noreferrer'}
-          className="shrink-0 flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-white text-slate-700 transition-colors shadow-2xs"
-          title="Download document"
-        >
-          <svg className="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-          </svg>
-          <span>Download</span>
-        </a>
-      ) : (
-        <button
-          type="button"
-          disabled
-          title="No document is attached to this resource yet"
-          className="shrink-0 flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 text-slate-400 cursor-not-allowed"
-        >
-          <span>No file</span>
-        </button>
-      )}
+        {/* Download action button */}
+        {resource.file_url ? (
+          <a
+            href={resource.file_url}
+            download={resource.file_url.startsWith('/') ? true : undefined}
+            target={resource.file_url.startsWith('/') ? undefined : '_blank'}
+            rel={resource.file_url.startsWith('/') ? undefined : 'noreferrer'}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-blue-100/10 bg-white/[0.025] px-2.5 py-1.5 text-[10px] font-semibold text-slate-300 transition-colors hover:border-blue-200/25 hover:bg-blue-400/10 hover:text-white"
+            title="Download document"
+          >
+            <svg className="h-3.5 w-3.5 text-sky-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            <span>Download</span>
+          </a>
+        ) : (
+          <button type="button" disabled title="No document is attached to this resource yet" className="shrink-0 rounded-lg border border-blue-100/10 px-2.5 py-1.5 text-[10px] font-semibold text-slate-600 cursor-not-allowed">
+            No file
+          </button>
+        )}
+      </div>
     </div>
   );
 }

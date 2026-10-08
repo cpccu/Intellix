@@ -144,6 +144,12 @@ const QuerySubmitSchema = z.object({
 
 // ── getFaqs ──────────────────────────────────────────────────
 export async function getFaqs(category?: HelpdeskCategory): Promise<ActionResponse<FAQItem[]>> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    const filtered = category
+      ? FALLBACK_FAQS.filter((faq) => faq.category === category)
+      : FALLBACK_FAQS;
+    return { success: true, data: filtered };
+  }
   try {
     const supabase = await createClient();
     let query = supabase.from('faqs').select('*').order('created_at', { ascending: false });
@@ -172,6 +178,9 @@ export async function getFaqs(category?: HelpdeskCategory): Promise<ActionRespon
 
 // ── getHelpdeskQueries ───────────────────────────────────────
 export async function getHelpdeskQueries(): Promise<ActionResponse<HelpdeskQuery[]>> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return { success: true, data: FALLBACK_QUERIES };
+  }
   try {
     const supabase = await createClient();
     const { data, error } = await supabase

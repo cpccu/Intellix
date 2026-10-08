@@ -23,7 +23,7 @@ export const Tabs: React.FC<TabsProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`flex items-center gap-1 border-b border-slate-200 overflow-x-auto ${className}`}>
+    <div className={`flex min-w-0 items-center gap-1 border-b border-blue-200/15 overflow-x-auto overscroll-x-contain ${className}`}>
       {tabs.map((tab) => {
         const isActive = tab.id === activeTab;
         return (
@@ -33,8 +33,8 @@ export const Tabs: React.FC<TabsProps> = ({
             type="button"
             className={`inline-flex items-center gap-2 px-3.5 py-2.5 text-xs font-medium border-b-2 -mb-[1px] transition-colors whitespace-nowrap cursor-pointer ${
               isActive
-                ? 'border-slate-900 text-slate-900 font-semibold'
-                : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                ? 'border-sky-300 text-sky-100 font-semibold'
+                : 'border-transparent text-slate-400 hover:text-white hover:border-blue-200/40'
             }`}
           >
             {tab.icon && <span className="shrink-0">{tab.icon}</span>}
@@ -43,8 +43,8 @@ export const Tabs: React.FC<TabsProps> = ({
               <span
                 className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] ${
                   isActive
-                    ? 'bg-slate-900 text-white'
-                    : 'bg-slate-100 text-slate-600'
+                    ? 'bg-blue-400/20 text-sky-100'
+                    : 'bg-white/[0.06] text-slate-400'
                 }`}
               >
                 {tab.count}

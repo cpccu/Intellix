@@ -3,6 +3,7 @@
 import { signInWithGoogle, enterGuestMode } from '@/lib/actions/auth.actions';
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { ArrowRight, BookOpen, CalendarDays, CircleHelp, Search, Sparkles } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -39,26 +40,48 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full max-w-sm">
-      {/* Wordmark */}
-      <div className="mb-8 text-center">
-        <div className="inline-flex items-center justify-center w-12 h-12 bg-slate-900 rounded-xl shadow-sm mb-4">
-          <span className="text-white text-sm font-bold tracking-tight">CU</span>
+    <div className="relative z-10 grid w-full max-w-5xl overflow-hidden rounded-2xl border border-blue-200/15 bg-[#0c1530]/90 shadow-[0_24px_100px_rgba(1,5,20,0.55)] backdrop-blur-xl lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="astra-panel relative hidden min-h-[600px] flex-col justify-between overflow-hidden p-10 text-white lg:flex">
+        <div className="absolute -right-24 -top-12 h-80 w-80 rounded-full border border-white/10" />
+        <div className="absolute -right-6 top-8 h-56 w-56 rounded-full border border-white/10" />
+        <div className="relative flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-sky-300 to-indigo-400 text-sm font-black text-[#10172f] shadow-[0_0_24px_rgba(94,164,255,.25)]">CU</div>
+          <div><p className="text-sm font-bold">CampusOS</p><p className="mt-0.5 text-[10px] tracking-wide text-slate-400">CITY UNIVERSITY</p></div>
         </div>
-        <h1 className="text-slate-900 font-bold text-xl tracking-tight">CampusOS</h1>
+        <div className="relative max-w-sm py-8">
+          <span className="mb-5 inline-flex items-center gap-2 rounded-lg border border-blue-200/20 bg-blue-300/10 px-3 py-1.5 text-[10px] font-semibold text-sky-200"><Sparkles size={13} /> YOUR CAMPUS, CONNECTED</span>
+          <h2 className="text-4xl font-semibold leading-[1.12] tracking-tight">Make campus life feel a little closer.</h2>
+          <p className="mt-4 text-sm leading-relaxed text-slate-300">The people, places, and resources that make your university experience yours.</p>
+          <div className="mt-8 grid grid-cols-2 gap-3">
+            {[[CalendarDays, 'Campus events'], [BookOpen, 'Study resources'], [CircleHelp, 'Quick answers'], [Search, 'Lost & found']].map(([Icon, label]) => {
+              const ItemIcon = Icon as typeof CalendarDays;
+              return <div key={label as string} className="flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/[0.05] px-3 py-3 text-[11px] text-slate-200"><ItemIcon size={15} className="text-sky-300" />{label as string}</div>;
+            })}
+          </div>
+        </div>
+        <div className="relative flex items-center justify-between text-[10px] text-slate-400"><span>CPCCU · 2026</span><span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />Campus network online</span></div>
+      </div>
+      <div className="flex flex-col justify-center bg-[#0b1430]/75 px-6 py-10 sm:px-10 lg:px-12">
+      {/* Wordmark */}
+      <div className="mb-7 text-center lg:hidden">
+        <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-sky-300 to-indigo-400 rounded-xl mb-4 shadow-[0_0_24px_rgba(94,164,255,.25)]">
+          <span className="text-[#10172f] text-sm font-black tracking-tight">CU</span>
+        </div>
+        <h1 className="text-white font-bold text-xl tracking-tight">CampusOS</h1>
         <p className="text-slate-500 text-sm mt-1">City University Student Portal</p>
       </div>
 
       {/* Card */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
-        <h2 className="text-slate-900 font-semibold text-base mb-1">Sign in to your account</h2>
-        <p className="text-slate-500 text-xs mb-6 leading-relaxed">
+      <div>
+        <p className="eyebrow mb-2 hidden lg:block">Welcome to CampusOS</p>
+        <h2 className="text-white font-semibold text-2xl tracking-tight mb-2">Sign in to your account</h2>
+        <p className="text-slate-300 text-[13px] mb-7 leading-relaxed">
           Sign in with Google to save to CampusOS, or continue as a guest to try demo features saved only in this browser.
         </p>
 
         {error && (
-          <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3">
-            <p className="text-red-700 text-xs">{error}</p>
+          <div className="mb-5 rounded-lg bg-red-400/10 border border-red-300/20 px-4 py-3">
+            <p className="text-red-200 text-xs">{error}</p>
           </div>
         )}
 
@@ -67,7 +90,7 @@ export default function LoginPage() {
           type="button"
           onClick={handleGoogleSignIn}
           disabled={isPending}
-          className="w-full flex items-center justify-center gap-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-sm rounded-xl px-4 py-3 transition-colors duration-150 mb-3 cursor-pointer"
+          className="w-full flex items-center justify-center gap-3 bg-[#1c2433] hover:bg-[#2c3749] disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-sm rounded-xl px-4 py-3.5 transition-colors duration-150 mb-3 cursor-pointer shadow-[0_8px_16px_rgba(28,36,51,0.16)]"
         >
           <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#EA4335" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -80,9 +103,9 @@ export default function LoginPage() {
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-4">
-          <div className="flex-1 border-t border-slate-100" />
+          <div className="flex-1 border-t border-white/10" />
           <span className="text-slate-400 text-xs font-medium">or</span>
-          <div className="flex-1 border-t border-slate-100" />
+          <div className="flex-1 border-t border-white/10" />
         </div>
 
         {/* Guest Demo Mode */}
@@ -90,10 +113,10 @@ export default function LoginPage() {
           type="button"
           onClick={handleGuestMode}
           disabled={isPending}
-          className="w-full flex items-center justify-center gap-2 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 disabled:opacity-60 disabled:cursor-not-allowed text-slate-700 font-medium text-sm rounded-xl px-4 py-3 transition-colors duration-150 cursor-pointer"
+          className="group w-full flex items-center justify-center gap-2 border border-blue-200/20 hover:border-blue-200/40 hover:bg-white/[0.06] disabled:opacity-60 disabled:cursor-not-allowed text-slate-100 font-medium text-sm rounded-xl px-4 py-3.5 transition-colors duration-150 cursor-pointer"
         >
           <svg
-            className="w-4 h-4 text-slate-500 shrink-0"
+            className="w-4 h-4 text-slate-300 shrink-0"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -106,13 +129,15 @@ export default function LoginPage() {
             />
           </svg>
           Continue as Guest (Demo Mode)
+          <ArrowRight size={14} className="ml-1 text-slate-300 transition-transform group-hover:translate-x-0.5" />
         </button>
 
       </div>
 
-      <p className="text-center text-slate-400 text-xs mt-6">
+      <p className="text-center text-slate-400 text-[10px] mt-7">
         © 2026 City University · CampusOS · CPCCU Hackathon
       </p>
+      </div>
     </div>
   );
 }

@@ -20,6 +20,8 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Tabs } from '@/components/ui/Tabs';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { PageIntro } from '@/components/ui/PageIntro';
+import { PackageSearch } from 'lucide-react';
 
 interface LostFoundClientPageProps {
   initialItems: LostFoundItem[];
@@ -247,25 +249,19 @@ export function LostFoundClientPage({
   };
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto">
-      {/* ── Top Header ────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-            Lost & Found / Complaint Box
-          </h1>
-          <p className="text-slate-500 text-sm mt-0.5">
-            Post and recover misplaced items or file administrative facility and academic complaints.
-          </p>
-        </div>
-
-        <div className="flex gap-2">
-          {activeTab === 'lost_found' ? (
+    <div className="mx-auto max-w-[1320px] space-y-6">
+      <PageIntro
+        icon={<PackageSearch size={19} />}
+        kicker="Campus community board"
+        title="Lost & found"
+        description="Reconnect belongings with their owners or follow administrative reports from the campus community."
+        aside={activeTab === 'lost_found' ? (
             <Button
               type="button"
               onClick={() => setShowItemModal(true)}
-              variant="primary"
+              variant="outline"
               size="sm"
+              className="shrink-0"
             >
               <svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.5v15m7.5-7.5h-15" />
@@ -276,8 +272,9 @@ export function LostFoundClientPage({
             <Button
               type="button"
               onClick={() => setShowComplaintModal(true)}
-              variant="primary"
+              variant="outline"
               size="sm"
+              className="shrink-0"
             >
               <svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.5v15m7.5-7.5h-15" />
@@ -285,8 +282,7 @@ export function LostFoundClientPage({
               Lodge Complaint
             </Button>
           )}
-        </div>
-      </div>
+      />
 
       {/* ── Tabs Navigation ───────────────────────────────── */}
       <Tabs
@@ -300,11 +296,12 @@ export function LostFoundClientPage({
 
       {/* ════════ TAB 1: LOST & FOUND ═══════════════════════ */}
       {activeTab === 'lost_found' && (
-        <div className="space-y-5">
+        <div className="grid items-start gap-5 xl:grid-cols-[250px_minmax(0,1fr)]">
           {/* Filter Bar */}
-          <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
-            <div className="flex flex-wrap gap-2 w-full md:w-auto">
-              <div className="inline-flex rounded-lg border border-slate-200 bg-white p-1">
+          <aside className="space-y-4 rounded-2xl border border-blue-100/10 bg-[#101a37]/70 p-3 sm:p-4">
+            <div className="space-y-2">
+              <p className="px-1 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Listing type</p>
+              <div className="flex w-full flex-wrap gap-1 rounded-xl border border-blue-100/10 bg-[#0a1430]/70 p-1">
                 {(['all', 'lost', 'found'] as const).map((t) => (
                   <button
                     key={t}
@@ -312,19 +309,22 @@ export function LostFoundClientPage({
                     onClick={() => setTypeFilter(t)}
                     className={`px-3 py-1 rounded-md text-xs font-semibold capitalize cursor-pointer transition-colors ${
                       typeFilter === t
-                        ? 'bg-slate-900 text-white shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-blue-400/15 text-sky-100 shadow-xs ring-1 ring-blue-200/15'
+                        : 'text-slate-500 hover:text-white'
                     }`}
                   >
                     {t === 'all' ? 'All Items' : t}
                   </button>
                 ))}
               </div>
+            </div>
 
+            <div className="space-y-2">
+              <p className="px-1 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Category</p>
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value as 'all' | LostFoundCategory)}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400"
+                className="w-full rounded-xl border border-blue-100/10 bg-[#0a1430]/80 px-3 py-2.5 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400/40"
               >
                 <option value="all">All Categories</option>
                 <option value="electronics">Electronics & Gadgets</option>
@@ -336,18 +336,22 @@ export function LostFoundClientPage({
               </select>
             </div>
 
-            <div className="w-full md:w-64">
+            <div className="space-y-2">
+              <p className="px-1 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Search the board</p>
               <Input
                 value={searchFilter}
                 onChange={(e) => setSearchFilter(e.target.value)}
                 placeholder="Search items, locations..."
-                className="py-1.5 text-xs"
+                className="py-2.5 text-xs"
               />
             </div>
-          </div>
+            <div className="hidden rounded-xl border border-blue-100/10 bg-[#0a1430]/60 p-3 lg:block"><p className="text-[10px] font-semibold text-slate-300">Campus board</p><p className="mt-1 text-[10px] leading-relaxed text-slate-500">Listings are shared with the campus community. Use the type and category controls to narrow what you see.</p></div>
+          </aside>
 
           {/* Items Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="min-w-0 space-y-3">
+          <div className="flex items-end justify-between border-b border-blue-100/10 pb-3"><div><p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Community board</p><p className="mt-1 text-sm font-semibold text-slate-100">{filteredItems.length} matching listings</p></div><span className="text-[10px] text-slate-500">Newest first</span></div>
+          <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
             {filteredItems.map((item) => {
               const isFound = item.item_type === 'found';
               const isClaimed = item.status === 'claimed';
@@ -355,7 +359,7 @@ export function LostFoundClientPage({
               return (
                 <div
                   key={item.id}
-                  className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col justify-between hover:border-slate-300 transition-colors"
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-blue-100/10 bg-[#101a37]/80 p-5 shadow-[0_12px_34px_rgba(2,7,24,.12)] transition hover:-translate-y-0.5 hover:border-blue-200/25"
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-2">
@@ -367,7 +371,7 @@ export function LostFoundClientPage({
                       </Badge>
                     </div>
 
-                    <h3 className="font-semibold text-slate-900 text-sm mb-1 line-clamp-2">
+                    <h3 className="mb-1 text-sm font-semibold text-slate-100 line-clamp-2">
                       {item.title}
                     </h3>
                     <p className="text-xs text-slate-600 mb-3 line-clamp-3 leading-relaxed">
@@ -423,14 +427,16 @@ export function LostFoundClientPage({
               }
             />
           )}
+          </div>
         </div>
       )}
 
       {/* ════════ TAB 2: COMPLAINT BOX ══════════════════════ */}
       {activeTab === 'complaints' && (
-        <div className="space-y-6">
+        <div className="grid items-start gap-5 lg:grid-cols-[minmax(280px,.8fr)_minmax(0,1.2fr)]">
+          <aside className="rounded-2xl border border-blue-100/10 bg-[#101a37]/75 p-4 sm:p-5">
           {/* Tracking Card */}
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-5">
+          <div>
             <h3 className="text-sm font-semibold text-slate-900 mb-1">
               Track an Existing Complaint Status
             </h3>
@@ -501,9 +507,10 @@ export function LostFoundClientPage({
               </div>
             )}
           </div>
+          </aside>
 
           {/* Active Complaints Feed */}
-          <div>
+          <section className="min-w-0">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-slate-900">
                 Official Campus Complaints & Incident Log
@@ -515,7 +522,7 @@ export function LostFoundClientPage({
               {complaints.map((c) => (
                 <div
                   key={c.id}
-                  className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-2 hover:border-slate-300 transition-colors"
+                  className="rounded-2xl border border-blue-100/10 bg-[#101a37]/75 p-5 shadow-[0_12px_34px_rgba(2,7,24,.12)] space-y-2 hover:border-blue-200/25 transition-colors"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
@@ -559,7 +566,7 @@ export function LostFoundClientPage({
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         </div>
       )}
 

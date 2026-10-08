@@ -87,7 +87,9 @@ export function EventCard({ event, showRsvp = true, isGuest = false }: Props) {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-3 hover:border-slate-300 transition-colors shadow-xs">
+    <div className="group relative flex flex-col gap-3 overflow-hidden rounded-[22px] border border-blue-100/10 bg-gradient-to-br from-[#142143] via-[#101a37] to-[#0d1732] p-5 shadow-[0_14px_36px_rgba(2,7,24,.15)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-200/25">
+      <span aria-hidden="true" className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full border border-blue-200/10 bg-blue-400/[0.035] transition-transform duration-500 group-hover:scale-110" />
+      <span aria-hidden="true" className="pointer-events-none absolute right-8 top-0 h-px w-16 bg-gradient-to-r from-transparent via-sky-200/40 to-transparent" />
       {/* Top row: club + status badge */}
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs text-slate-500 font-medium truncate">
@@ -162,7 +164,7 @@ export function EventCard({ event, showRsvp = true, isGuest = false }: Props) {
           className={`mt-auto self-start inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
             isRegistered
               ? 'bg-emerald-600 text-white cursor-default'
-              : 'bg-slate-900 hover:bg-slate-800 text-white shadow-xs'
+              : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-[0_8px_22px_rgba(35,83,175,.22)]'
           }`}
         >
           {isPending ? 'Registering…' : isRegistered ? '✓ Registered' : 'RSVP / Get Digital Pass'}
@@ -177,7 +179,7 @@ export function EventCard({ event, showRsvp = true, isGuest = false }: Props) {
           className={`mt-auto self-start inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
             isRegistered
               ? 'bg-slate-700 text-white cursor-default'
-              : 'bg-slate-700 hover:bg-slate-600 text-white shadow-xs'
+              : 'bg-blue-500/25 hover:bg-blue-500/35 border border-blue-200/10 text-white shadow-xs'
           }`}
         >
           {isPending ? 'Connecting…' : isRegistered ? '✓ Checked In' : '⚡ Check In / Live Access'}

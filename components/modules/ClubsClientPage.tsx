@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { Tabs } from '@/components/ui/Tabs';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { PageIntro } from '@/components/ui/PageIntro';
+import { CalendarDays } from 'lucide-react';
 
 interface ClubsClientPageProps {
   clubs: Club[];
@@ -103,30 +105,18 @@ export function ClubsClientPage({
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
-      {/* ── Page Header ────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-            Club & Event Engine
-          </h1>
-          <p className="text-slate-500 text-sm mt-0.5">
-            Explore verified student societies, register for campus hackathons, gym tournaments, and generate instant passes.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Badge variant="default" size="sm">
-            {events.length} Campus Events
-          </Badge>
-          <Badge variant="info" size="sm">
-            {clubs.length} Societies & Gym
-          </Badge>
-        </div>
-      </div>
+      <PageIntro
+        icon={<CalendarDays size={19} />}
+        kicker="Campus gathering points"
+        title="Clubs & events"
+        description="Explore student societies, register for campus events, and keep up with what is happening across campus."
+        aside={<><Badge variant="default" size="sm">{events.length} Campus Events</Badge><Badge variant="info" size="sm">{clubs.length} Societies & Gym</Badge></>}
+      />
 
       {/* ── Tabs Navigation ───────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col justify-between gap-3 xl:flex-row xl:items-center xl:gap-4">
         <Tabs
+          className="w-full max-w-full xl:flex-1"
           activeTab={activeTab}
           onChange={(t) => setActiveTab(t as 'events' | 'clubs' | 'activities')}
           tabs={[
@@ -136,7 +126,7 @@ export function ClubsClientPage({
           ]}
         />
 
-        <div className="w-full sm:w-72">
+        <div className="w-full xl:w-72 xl:shrink-0">
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -148,10 +138,11 @@ export function ClubsClientPage({
 
       {/* ════════ TAB 1: EVENTS ═════════════════════════════ */}
       {activeTab === 'events' && (
-        <div className="space-y-4">
+        <div className="grid items-start gap-5 xl:grid-cols-[250px_minmax(0,1fr)]">
+          <aside className="space-y-3 rounded-2xl border border-blue-100/10 bg-[#101a37]/70 p-3 sm:p-4">
           {/* Active Club or Category Banner */}
           {(selectedClubId || selectedCategory) && (
-            <div className="flex items-center justify-between p-3 bg-slate-900 text-white rounded-xl shadow-xs text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-sky-200/15 bg-blue-400/10 p-3 text-[10px] text-white">
               <div className="flex items-center gap-2">
                 <span className="text-slate-400">Filtering events for:</span>
                 <span className="font-semibold text-white">
@@ -176,9 +167,11 @@ export function ClubsClientPage({
           )}
 
           {/* Filter Controls Row */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3 bg-slate-50 border border-slate-200/80 rounded-xl">
+          <div className="flex flex-col items-start gap-4">
             {/* Status Tabs with Live Counts */}
-            <div className="flex flex-wrap gap-1.5">
+            <div className="w-full space-y-2">
+              <p className="px-1 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Event status</p>
+              <div className="flex flex-wrap gap-1.5">
               {(['all', 'upcoming', 'ongoing', 'completed'] as const).map((s) => {
                 const count =
                   s === 'all'
@@ -206,11 +199,13 @@ export function ClubsClientPage({
                   </button>
                 );
               })}
+              </div>
             </div>
 
             {/* Quick Filter Tag Chips */}
-            <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
-              <span className="text-[11px] text-slate-400 font-medium">Topic:</span>
+            <div className="w-full space-y-2">
+              <p className="px-1 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Explore topics</p>
+              <div className="grid grid-cols-1 gap-1.5 text-xs text-slate-500">
               {[
                 { label: '🏋️ Gym & Sports', category: 'Sports & Gym' },
                 { label: '💻 Hackathons & Tech', category: 'Technology' },
@@ -225,7 +220,7 @@ export function ClubsClientPage({
                     setSelectedClubId(null);
                     setEventFilter('all');
                   }}
-                  className={`px-2.5 py-1 rounded-md text-[11px] font-medium border transition-colors cursor-pointer ${
+                  className={`w-full rounded-lg border px-2.5 py-1.5 text-left text-[11px] font-medium transition-colors cursor-pointer ${
                     selectedCategory === tag.category
                       ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                       : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
@@ -234,11 +229,15 @@ export function ClubsClientPage({
                   {tag.label}
                 </button>
               ))}
+              </div>
             </div>
           </div>
+          </aside>
 
           {/* Events Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="min-w-0 space-y-3">
+          <div className="flex items-end justify-between border-b border-blue-100/10 pb-3"><div><p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Campus calendar</p><p className="mt-1 text-sm font-semibold text-slate-100">{filteredEvents.length} events to explore</p></div><span className="text-[10px] text-slate-500">Sorted by date</span></div>
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
             {filteredEvents.map((event) => (
               <EventCard
                 key={event.id}
@@ -269,6 +268,7 @@ export function ClubsClientPage({
               }
             />
           )}
+          </div>
         </div>
       )}
 

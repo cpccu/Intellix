@@ -170,6 +170,12 @@ export async function getLostFoundItems(
   type?: LostFoundType,
   category?: LostFoundCategory
 ): Promise<ActionResponse<LostFoundItem[]>> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    let items = FALLBACK_LOST_FOUND;
+    if (type) items = items.filter((item) => item.item_type === type);
+    if (category) items = items.filter((item) => item.category === category);
+    return { success: true, data: items };
+  }
   try {
     const supabase = await createClient();
     let query = supabase
@@ -283,6 +289,9 @@ export async function claimItem(id: string): Promise<ActionResponse> {
 
 // ── getComplaints ────────────────────────────────────────────
 export async function getComplaints(): Promise<ActionResponse<ComplaintItem[]>> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return { success: true, data: FALLBACK_COMPLAINTS };
+  }
   try {
     const supabase = await createClient();
     const { data, error } = await supabase
