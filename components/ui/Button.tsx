@@ -23,15 +23,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-semibold transition-all duration-150 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400/70 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer';
+      'inline-flex items-center justify-center font-semibold transition-all duration-150 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7b2435]/35 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer';
 
     const variants = {
-      primary: 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-500 hover:to-indigo-500 shadow-[0_8px_22px_rgba(35,83,175,.25)]',
-      secondary: 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200/80',
+      primary: 'bg-[#792c3b] !text-white hover:bg-[#612331] shadow-sm',
+      secondary: 'bg-[#f5e9eb] text-[#792c3b] hover:bg-[#ead3d8] border border-[#ead3d8]',
       outline:
-        'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-sm',
-      ghost: 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
-      danger: 'bg-red-600 text-white hover:bg-red-700 shadow-sm',
+        'border border-[#d9ced0] bg-white text-[#51484a] hover:bg-[#fbf5f5] hover:border-[#d5b9be] shadow-sm',
+      ghost: 'text-[#5f5556] hover:bg-[#f5e9eb] hover:text-[#792c3b]',
+      danger: 'bg-[#9f263a] !text-white hover:bg-[#811d2e] shadow-sm',
     };
 
     const sizes = {

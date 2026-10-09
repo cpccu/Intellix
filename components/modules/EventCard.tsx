@@ -13,7 +13,7 @@ interface Props {
 
 const STATUS_STYLES = {
   upcoming: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  ongoing: 'bg-blue-50 text-blue-700 border-blue-200',
+  ongoing: 'bg-[#f5e9eb] text-[#792c3b] border-[#ead3d8]',
   cancelled: 'bg-red-50 text-red-700 border-red-200',
   completed: 'bg-slate-100 text-slate-500 border-slate-200',
 };
@@ -87,9 +87,8 @@ export function EventCard({ event, showRsvp = true, isGuest = false }: Props) {
   };
 
   return (
-    <div className="group relative flex flex-col gap-3 overflow-hidden rounded-[22px] border border-blue-100/10 bg-gradient-to-br from-[#142143] via-[#101a37] to-[#0d1732] p-5 shadow-[0_14px_36px_rgba(2,7,24,.15)] transition duration-200 hover:-translate-y-0.5 hover:border-blue-200/25">
-      <span aria-hidden="true" className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full border border-blue-200/10 bg-blue-400/[0.035] transition-transform duration-500 group-hover:scale-110" />
-      <span aria-hidden="true" className="pointer-events-none absolute right-8 top-0 h-px w-16 bg-gradient-to-r from-transparent via-sky-200/40 to-transparent" />
+    <div className="group relative flex flex-col gap-3 overflow-hidden rounded-xl border border-[#e3e8df] bg-white p-5 shadow-[0_1px_3px_rgba(41,36,37,.035)] transition duration-200 hover:-translate-y-1 hover:border-[#cfb0b6] hover:shadow-[0_14px_30px_rgba(83,29,41,.10)]">
+      <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#792c3b] via-[#b4616c] to-[#ead3d8]" />
       {/* Top row: club + status badge */}
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs text-slate-500 font-medium truncate">
@@ -105,7 +104,7 @@ export function EventCard({ event, showRsvp = true, isGuest = false }: Props) {
       </div>
 
       {/* Title */}
-      <h3 className="text-sm font-semibold text-slate-900 leading-snug line-clamp-2">
+      <h3 className="text-[15px] font-bold text-slate-900 leading-snug line-clamp-2 transition-colors group-hover:text-[#792c3b]">
         {event.title}
       </h3>
 
@@ -163,8 +162,8 @@ export function EventCard({ event, showRsvp = true, isGuest = false }: Props) {
           disabled={isPending || isRegistered}
           className={`mt-auto self-start inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
             isRegistered
-              ? 'bg-emerald-600 text-white cursor-default'
-              : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-[0_8px_22px_rgba(35,83,175,.22)]'
+              ? 'bg-[#792c3b] !text-white cursor-default'
+              : 'bg-[#792c3b] hover:bg-[#612331] !text-white shadow-sm'
           }`}
         >
           {isPending ? 'Registering…' : isRegistered ? '✓ Registered' : 'RSVP / Get Digital Pass'}
@@ -178,8 +177,8 @@ export function EventCard({ event, showRsvp = true, isGuest = false }: Props) {
           disabled={isPending || isRegistered}
           className={`mt-auto self-start inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
             isRegistered
-              ? 'bg-slate-700 text-white cursor-default'
-              : 'bg-blue-500/25 hover:bg-blue-500/35 border border-blue-200/10 text-white shadow-xs'
+              ? 'bg-[#792c3b] !text-white cursor-default'
+              : 'bg-[#f5e9eb] hover:bg-[#ead3d8] border border-[#ead3d8] !text-[#792c3b] shadow-xs'
           }`}
         >
           {isPending ? 'Connecting…' : isRegistered ? '✓ Checked In' : '⚡ Check In / Live Access'}

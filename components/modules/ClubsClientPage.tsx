@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { Tabs } from '@/components/ui/Tabs';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { SectionWatermark } from '@/components/modules/SectionWatermark';
 import { PageIntro } from '@/components/ui/PageIntro';
 import { CalendarDays } from 'lucide-react';
 
@@ -104,7 +105,7 @@ export function ClubsClientPage({
   const activeClubObj = selectedClubId ? clubs.find((c) => c.id === selectedClubId) : null;
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto">
+    <div className="section-page section-page--clubs mx-auto min-w-0 max-w-[1680px] space-y-6">
       <PageIntro
         icon={<CalendarDays size={19} />}
         kicker="Campus gathering points"
@@ -138,14 +139,15 @@ export function ClubsClientPage({
 
       {/* ════════ TAB 1: EVENTS ═════════════════════════════ */}
       {activeTab === 'events' && (
-        <div className="grid items-start gap-5 xl:grid-cols-[250px_minmax(0,1fr)]">
-          <aside className="space-y-3 rounded-2xl border border-blue-100/10 bg-[#101a37]/70 p-3 sm:p-4">
+        <div className="grid min-w-0 items-start gap-5 xl:grid-cols-[minmax(210px,250px)_minmax(0,1fr)]">
+          <div className="min-w-0">
+          <aside className="space-y-3 rounded-2xl border border-[#e3e8df] bg-white p-3 sm:p-4">
           {/* Active Club or Category Banner */}
           {(selectedClubId || selectedCategory) && (
-            <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-sky-200/15 bg-blue-400/10 p-3 text-[10px] text-white">
+            <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#ead3d8] bg-[#f5e9eb] p-3 text-[10px] text-[#252b27]">
               <div className="flex items-center gap-2">
                 <span className="text-slate-400">Filtering events for:</span>
-                <span className="font-semibold text-white">
+                <span className="font-semibold text-[#792c3b]">
                   {activeClubObj ? activeClubObj.name : selectedCategory}
                 </span>
                 <span className="text-[11px] text-slate-400 font-mono">
@@ -159,7 +161,7 @@ export function ClubsClientPage({
                   setSelectedCategory(null);
                   setEventFilter('all');
                 }}
-                className="px-2.5 py-1 text-xs font-semibold bg-white/10 hover:bg-white/20 rounded text-white cursor-pointer transition-colors"
+                className="px-2.5 py-1 text-xs font-semibold bg-white hover:bg-[#f5e9eb] rounded text-[#792c3b] cursor-pointer transition-colors"
               >
                 Clear Filter ✕
               </button>
@@ -182,16 +184,16 @@ export function ClubsClientPage({
                     key={s}
                     type="button"
                     onClick={() => setEventFilter(s)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize cursor-pointer transition-colors border flex items-center gap-1.5 ${
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold capitalize cursor-pointer transition-colors border flex items-center gap-2 ${
                       eventFilter === s
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
-                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900'
+                        ? 'bg-[#792c3b] !text-white border-[#792c3b] shadow-sm'
+                        : 'bg-white !text-[#46534a] border-[#dce3d9] hover:bg-[#f2f5ef] hover:border-[#cbd8cc]'
                     }`}
                   >
                     <span>{s === 'all' ? 'All Events' : s}</span>
                     <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
-                        eventFilter === s ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                      className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold ${
+                        eventFilter === s ? 'bg-white/20 !text-white' : 'bg-[#f5e9eb] !text-[#792c3b]'
                       }`}
                     >
                       {count}
@@ -222,8 +224,8 @@ export function ClubsClientPage({
                   }}
                   className={`w-full rounded-lg border px-2.5 py-1.5 text-left text-[11px] font-medium transition-colors cursor-pointer ${
                     selectedCategory === tag.category
-                      ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
-                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
+                      ? 'bg-[#792c3b] !text-white border-[#792c3b] shadow-xs'
+                      : 'bg-white !text-[#46534a] border-slate-200 hover:bg-slate-100'
                   }`}
                 >
                   {tag.label}
@@ -233,11 +235,15 @@ export function ClubsClientPage({
             </div>
           </div>
           </aside>
+          <div className="hidden min-h-[390px] items-center justify-center xl:flex">
+            <SectionWatermark section="clubs" />
+          </div>
+          </div>
 
           {/* Events Grid */}
           <div className="min-w-0 space-y-3">
           <div className="flex items-end justify-between border-b border-blue-100/10 pb-3"><div><p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Campus calendar</p><p className="mt-1 text-sm font-semibold text-slate-100">{filteredEvents.length} events to explore</p></div><span className="text-[10px] text-slate-500">Sorted by date</span></div>
-          <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          <div className="grid min-w-0 grid-cols-1 gap-4 2xl:grid-cols-2">
             {filteredEvents.map((event) => (
               <EventCard
                 key={event.id}
@@ -279,7 +285,7 @@ export function ClubsClientPage({
             {filteredClubs.map((club) => (
               <div
                 key={club.id}
-                className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col justify-between hover:border-slate-300 transition-colors shadow-xs"
+                className="group relative overflow-hidden bg-white border border-slate-200 rounded-xl p-5 flex flex-col justify-between hover:-translate-y-1 hover:border-[#cfb0b6] hover:shadow-[0_14px_30px_rgba(83,29,41,.10)] transition-all shadow-sm"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-2">
@@ -310,7 +316,7 @@ export function ClubsClientPage({
                       setSearch('');
                       setActiveTab('events');
                     }}
-                    className="text-xs font-semibold text-slate-900 hover:text-blue-600 underline underline-offset-2 cursor-pointer shrink-0"
+                    className="inline-flex items-center rounded-md border border-[#ead3d8] bg-[#f5e9eb] px-2.5 py-1.5 text-xs font-semibold text-[#792c3b] transition hover:bg-[#ead3d8] cursor-pointer shrink-0"
                   >
                     View Events →
                   </button>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 650" fill="none">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#87939a"/><stop offset="1" stop-color="#d2b8a5"/></linearGradient>
+    <linearGradient id="brick" x2="0" y2="1"><stop stop-color="#b87c65"/><stop offset="1" stop-color="#724a40"/></linearGradient>
+    <linearGradient id="ground" x2="0" y2="1"><stop stop-color="#69745a"/><stop offset="1" stop-color="#283b32"/></linearGradient>
+    <pattern id="windows" width="78" height="82" patternUnits="userSpaceOnUse"><rect x="14" y="13" width="35" height="48" rx="2" fill="#28343a"/><path d="M31 14v46M15 36h33" stroke="#d3b9a2" stroke-width="4"/></pattern>
+    <pattern id="brickwork" width="48" height="21" patternUnits="userSpaceOnUse"><path d="M0 0h48M0 20h48M24 0v10M0 10v10" stroke="#542f2b" stroke-opacity=".24" stroke-width="2"/></pattern>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h1600v650H0z"/>
+  <path fill="#35434a" d="M0 124 180 58l102 30V0h1318v394H0z"/>
+  <path fill="url(#brick)" d="M230 82h1100v394H230z"/>
+  <path fill="url(#brickwork)" d="M230 82h1100v394H230z"/>
+  <path fill="#51423b" d="M186 86 778 18l605 68v33H186z"/>
+  <path fill="#dbc5aa" d="M245 131h1070v16H245zM245 235h1070v13H245zM245 341h1070v13H245z"/>
+  <path fill="url(#windows)" d="M257 145h1040v306H257z"/>
+  <path fill="#6f493d" d="M665 355h205v121H665z"/>
+  <path fill="#d3b79b" d="M645 346h245v17H645zM682 372h171v103H682z"/>
+  <path fill="#3d3330" d="M715 388h104v87H715z"/>
+  <path fill="#282e2c" d="M0 390h285v260H0zM1315 352h285v298h-285z"/>
+  <path fill="#4d5140" d="M52 356q89-210 176 0v294H52zM1380 314q99-215 178 0v336h-178z"/>
+  <path fill="#283b32" d="M0 500q360-60 710 18t890-7v139H0z"/>
+  <path fill="url(#ground)" d="M0 555q510-73 835 6t765-18v107H0z"/>
+  <g fill="#d28a45" opacity=".82"><path d="m120 390 24-62 18 62-23 21zM1470 374l28-77 20 77-23 25zM139 464l21-57 18 57-21 18zM1518 462l26-66 17 67-22 18z"/></g>
+  <g fill="#293a31"><path d="M84 402h22v172H84zM1457 388h24v183h-24zM151 457h18v121h-18zM1528 445h20v136h-20z"/></g>
+  <path fill="#251a1b" fill-opacity=".16" d="M0 0h1600v650H0z"/>
+</svg>

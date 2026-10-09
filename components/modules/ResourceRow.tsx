@@ -12,7 +12,7 @@ const CATEGORY_META: Record<
 > = {
   notes: {
     label: 'Lecture Notes',
-    classes: 'bg-blue-50 text-blue-700 border-blue-200/80',
+    classes: 'bg-[#f5e9eb] text-[#7b2435] border-[#ead0d5]',
     icon: (
       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
@@ -52,15 +52,15 @@ export function ResourceRow({ resource }: Props) {
   const meta = CATEGORY_META[resource.category] ?? CATEGORY_META.other;
 
   return (
-    <div className="group flex flex-col gap-3 px-4 py-4 transition-colors hover:bg-white/[0.025] sm:flex-row sm:items-center sm:gap-4 sm:px-5">
+    <div className="group flex flex-col gap-3 px-4 py-4 transition-colors hover:bg-[#fdf8f8] sm:flex-row sm:items-center sm:gap-4 sm:px-5">
       {/* Category icon */}
-      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${meta.classes}`}>
+      <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border shadow-[0_2px_6px_rgba(83,29,41,.06)] transition-transform group-hover:scale-105 ${meta.classes}`}>
         {meta.icon}
       </div>
 
       {/* Text info */}
       <div className="min-w-0 flex-1">
-        <p className="truncate text-xs font-semibold text-slate-100 sm:text-sm">{resource.title}</p>
+        <p className="truncate text-[13px] font-bold text-slate-100 transition-colors group-hover:text-[#792c3b] sm:text-sm">{resource.title}</p>
         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
           {resource.course_code && (
             <span className="text-[11px] font-mono font-medium text-slate-600 bg-slate-100 px-1.5 py-0.2 rounded border border-slate-200/80">
@@ -89,10 +89,10 @@ export function ResourceRow({ resource }: Props) {
             download={resource.file_url.startsWith('/') ? true : undefined}
             target={resource.file_url.startsWith('/') ? undefined : '_blank'}
             rel={resource.file_url.startsWith('/') ? undefined : 'noreferrer'}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-blue-100/10 bg-white/[0.025] px-2.5 py-1.5 text-[10px] font-semibold text-slate-300 transition-colors hover:border-blue-200/25 hover:bg-blue-400/10 hover:text-white"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[#ead3d8] bg-[#f5e9eb] px-2.5 py-1.5 text-[10px] font-semibold text-[#792c3b] transition-colors hover:border-[#d9b9bf] hover:bg-[#ead3d8]"
             title="Download document"
           >
-            <svg className="h-3.5 w-3.5 text-sky-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <svg className="h-3.5 w-3.5 text-[#792c3b]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
             <span>Download</span>

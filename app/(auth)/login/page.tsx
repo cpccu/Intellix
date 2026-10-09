@@ -40,32 +40,32 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative z-10 grid w-full max-w-5xl overflow-hidden rounded-2xl border border-blue-200/15 bg-[#0c1530]/90 shadow-[0_24px_100px_rgba(1,5,20,0.55)] backdrop-blur-xl lg:grid-cols-[1.05fr_0.95fr]">
+    <div className="relative z-10 grid w-full max-w-5xl overflow-hidden rounded-[24px] border border-[#eadfdd] bg-white shadow-[0_24px_70px_rgba(59,31,35,.12)] lg:grid-cols-[1.05fr_0.95fr]">
       <div className="astra-panel relative hidden min-h-[600px] flex-col justify-between overflow-hidden p-10 text-white lg:flex">
         <div className="absolute -right-24 -top-12 h-80 w-80 rounded-full border border-white/10" />
         <div className="absolute -right-6 top-8 h-56 w-56 rounded-full border border-white/10" />
         <div className="relative flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-sky-300 to-indigo-400 text-sm font-black text-[#10172f] shadow-[0_0_24px_rgba(94,164,255,.25)]">CU</div>
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#7b2435] text-sm font-black text-white shadow-[0_6px_18px_rgba(123,36,53,.22)]">CU</div>
           <div><p className="text-sm font-bold">CampusOS</p><p className="mt-0.5 text-[10px] tracking-wide text-slate-400">CITY UNIVERSITY</p></div>
         </div>
         <div className="relative max-w-sm py-8">
-          <span className="mb-5 inline-flex items-center gap-2 rounded-lg border border-blue-200/20 bg-blue-300/10 px-3 py-1.5 text-[10px] font-semibold text-sky-200"><Sparkles size={13} /> YOUR CAMPUS, CONNECTED</span>
+          <span className="mb-5 inline-flex items-center gap-2 rounded-lg border border-[#eadfdd] bg-[#f5e9eb] px-3 py-1.5 text-[10px] font-semibold text-[#7b2435]"><Sparkles size={13} /> YOUR CAMPUS, CONNECTED</span>
           <h2 className="text-4xl font-semibold leading-[1.12] tracking-tight">Make campus life feel a little closer.</h2>
           <p className="mt-4 text-sm leading-relaxed text-slate-300">The people, places, and resources that make your university experience yours.</p>
           <div className="mt-8 grid grid-cols-2 gap-3">
             {[[CalendarDays, 'Campus events'], [BookOpen, 'Study resources'], [CircleHelp, 'Quick answers'], [Search, 'Lost & found']].map(([Icon, label]) => {
               const ItemIcon = Icon as typeof CalendarDays;
-              return <div key={label as string} className="flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/[0.05] px-3 py-3 text-[11px] text-slate-200"><ItemIcon size={15} className="text-sky-300" />{label as string}</div>;
+              return <div key={label as string} className="flex items-center gap-2.5 rounded-xl border border-[#eadfdd] bg-white/75 px-3 py-3 text-[11px] text-[#514346]"><ItemIcon size={15} className="text-[#7b2435]" />{label as string}</div>;
             })}
           </div>
         </div>
         <div className="relative flex items-center justify-between text-[10px] text-slate-400"><span>CPCCU · 2026</span><span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />Campus network online</span></div>
       </div>
-      <div className="flex flex-col justify-center bg-[#0b1430]/75 px-6 py-10 sm:px-10 lg:px-12">
+      <div className="flex flex-col justify-center bg-white px-6 py-10 sm:px-10 lg:px-12">
       {/* Wordmark */}
       <div className="mb-7 text-center lg:hidden">
-        <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-sky-300 to-indigo-400 rounded-xl mb-4 shadow-[0_0_24px_rgba(94,164,255,.25)]">
-          <span className="text-[#10172f] text-sm font-black tracking-tight">CU</span>
+        <div className="inline-flex items-center justify-center w-12 h-12 bg-[#7b2435] rounded-xl mb-4 shadow-[0_6px_18px_rgba(123,36,53,.22)]">
+          <span className="text-white text-sm font-black tracking-tight">CU</span>
         </div>
         <h1 className="text-white font-bold text-xl tracking-tight">CampusOS</h1>
         <p className="text-slate-500 text-sm mt-1">City University Student Portal</p>
@@ -90,7 +90,7 @@ export default function LoginPage() {
           type="button"
           onClick={handleGoogleSignIn}
           disabled={isPending}
-          className="w-full flex items-center justify-center gap-3 bg-[#1c2433] hover:bg-[#2c3749] disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-sm rounded-xl px-4 py-3.5 transition-colors duration-150 mb-3 cursor-pointer shadow-[0_8px_16px_rgba(28,36,51,0.16)]"
+          className="w-full flex items-center justify-center gap-3 bg-[#7b2435] hover:bg-[#65202e] disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-sm rounded-xl px-4 py-3.5 transition-colors duration-150 mb-3 cursor-pointer shadow-[0_8px_16px_rgba(123,36,53,.18)]"
         >
           <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#EA4335" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -113,7 +113,7 @@ export default function LoginPage() {
           type="button"
           onClick={handleGuestMode}
           disabled={isPending}
-          className="group w-full flex items-center justify-center gap-2 border border-blue-200/20 hover:border-blue-200/40 hover:bg-white/[0.06] disabled:opacity-60 disabled:cursor-not-allowed text-slate-100 font-medium text-sm rounded-xl px-4 py-3.5 transition-colors duration-150 cursor-pointer"
+          className="group w-full flex items-center justify-center gap-2 border border-[#eadfdd] hover:border-[#d7b5bb] hover:bg-[#fbf6f4] disabled:opacity-60 disabled:cursor-not-allowed text-[#514346] font-medium text-sm rounded-xl px-4 py-3.5 transition-colors duration-150 cursor-pointer"
         >
           <svg
             className="w-4 h-4 text-slate-300 shrink-0"

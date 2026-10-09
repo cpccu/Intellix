@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { SectionWatermark } from '@/components/modules/SectionWatermark';
 import { PageIntro } from '@/components/ui/PageIntro';
 import { CircleHelp, Search } from 'lucide-react';
 
@@ -111,7 +112,7 @@ export function HelpdeskClientPage({
   };
 
   return (
-    <div className="mx-auto max-w-[1320px] space-y-7">
+    <div className="section-page section-page--helpdesk mx-auto max-w-[1680px] space-y-7">
       <PageIntro
         icon={<CircleHelp size={19} />}
         kicker="Student support network"
@@ -120,15 +121,16 @@ export function HelpdeskClientPage({
         aside={<Button type="button" onClick={() => setShowQueryModal(true)} variant="primary" size="sm"><span className="mr-1 text-base leading-none">+</span> Submit inquiry</Button>}
       />
 
-      <div className="grid items-start gap-5 xl:grid-cols-[270px_minmax(0,1fr)]">
-        <aside className="space-y-5 rounded-2xl border border-blue-100/10 bg-[#101a37]/75 p-3 sm:p-4">
+      <div className="grid min-w-0 items-stretch gap-5 xl:grid-cols-[250px_minmax(0,1fr)] 2xl:grid-cols-[270px_minmax(0,1fr)]">
+        <div className="min-w-0">
+        <aside className="space-y-5 rounded-2xl border border-[#e3e8df] bg-white p-3 sm:p-4">
           <div>
             <p className="mb-2 px-2 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Quick topics</p>
             <div className="space-y-1">
               {QUICK_TOPICS.map((topic, index) => (
                 <button key={topic.label} type="button" onClick={() => { setActiveCategory(topic.category); setSearchQuery(''); }}
-                  className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition ${activeCategory === topic.category ? 'bg-blue-400/12 text-sky-100 ring-1 ring-blue-300/20' : 'text-slate-400 hover:bg-white/[0.04] hover:text-white'}`}>
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.04] text-base">{topic.icon}</span>
+                  className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition ${activeCategory === topic.category ? 'bg-[#f5e9eb] !text-[#792c3b] ring-1 ring-[#ead3d8]' : '!text-[#58645a] hover:bg-[#fbf5f5] hover:!text-[#252b27]'}`}>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f3f6f1] text-base">{topic.icon}</span>
                   <span className="min-w-0 flex-1 text-[11px] font-semibold">{topic.label}</span>
                   <span className="text-[9px] font-mono text-slate-600">0{index + 1}</span>
                 </button>
@@ -140,7 +142,7 @@ export function HelpdeskClientPage({
             <div className="flex flex-wrap gap-1.5">
               {CATEGORIES.map((cat) => (
                 <button key={cat.id} type="button" onClick={() => setActiveCategory(cat.id)} aria-pressed={activeCategory === cat.id}
-                  className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[10px] font-semibold transition ${activeCategory === cat.id ? 'border-blue-200/20 bg-blue-400/12 text-sky-100' : 'border-blue-100/10 bg-[#0a1430]/60 text-slate-500 hover:text-slate-200'}`}>
+                  className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[10px] font-semibold transition ${activeCategory === cat.id ? 'border-[#ead3d8] bg-[#f5e9eb] !text-[#792c3b]' : 'border-[#e3e8df] bg-white !text-[#58645a] hover:bg-[#fbf5f5] hover:!text-[#252b27]'}`}>
                   <span>{cat.icon}</span>{cat.label}
                 </button>
               ))}
@@ -151,6 +153,11 @@ export function HelpdeskClientPage({
             <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search answers..." className="py-2 pl-9 text-xs" />
           </div>
         </aside>
+
+        <div className="section-watermark-rail sticky top-[28vh] hidden min-h-[390px] items-center justify-center xl:flex">
+          <SectionWatermark section="helpdesk" />
+        </div>
+        </div>
 
         <section className="min-w-0 space-y-3">
           <div className="flex items-end justify-between border-b border-blue-100/10 pb-3"><div><p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Knowledge base</p><p className="mt-1 text-sm font-semibold text-slate-100">{filteredFaqs.length} answers in {CATEGORIES.find((cat) => cat.id === activeCategory)?.label}</p></div><span className="text-[10px] text-slate-500">Official campus guidance</span></div>
@@ -169,34 +176,22 @@ export function HelpdeskClientPage({
             }
           />
         ) : (
-          <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
-            {filteredFaqs.map((faq) => (
-              <div
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+            {filteredFaqs.map((faq, index) => (
+              <article
                 key={faq.id}
-                className="group rounded-2xl border border-blue-100/10 bg-[#101a37]/75 p-5 transition hover:border-blue-200/25"
+                className="group relative isolate overflow-hidden rounded-xl border border-[#e7dfe0] bg-white p-5 pl-6 shadow-[0_2px_8px_rgba(60,26,33,.035)] transition duration-200 hover:-translate-y-1 hover:border-[#c99ea6] hover:shadow-[0_14px_30px_rgba(83,29,41,.10)] sm:p-6 sm:pl-7"
               >
-                <div className="flex items-start justify-between gap-3 mb-2.5">
-                  <h3 className="text-sm font-semibold text-slate-100 leading-snug">
-                    {faq.question}
-                  </h3>
-                  <Badge variant="neutral" size="sm">
-                    {faq.category.replace(/_/g, ' ')}
-                  </Badge>
+                <span aria-hidden="true" className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#792c3b] via-[#aa5360] to-[#ead3d8] transition-all group-hover:w-2.5" />
+                <span aria-hidden="true" className="pointer-events-none absolute -right-6 -top-10 -z-10 select-none text-[120px] font-black leading-none text-[#f9f1f2]">{String(index + 1).padStart(2, '0')}</span>
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <span className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.16em] text-[#792c3b]"><span className="h-1.5 w-1.5 rounded-full bg-[#a51f37]" /> Campus answer</span>
+                  <span className="rounded-md bg-[#f8f1f2] px-2 py-1 text-[9px] font-semibold uppercase tracking-wide text-[#792c3b]">{faq.category.replace(/_/g, ' ')}</span>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">{faq.answer}</p>
-                {faq.tags && faq.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-3 pt-3 border-t border-blue-100/10">
-                    {faq.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] text-slate-500 bg-white/[0.035] px-1.5 py-0.5 rounded border border-blue-100/10"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
+                <h3 className="max-w-[92%] text-[15px] font-bold leading-snug tracking-[-0.01em] text-[#292425] sm:text-base">{faq.question}</h3>
+                <p className="mt-3 line-clamp-4 text-[13px] leading-[1.7] text-[#5e5355]">{faq.answer}</p>
+                {faq.tags && faq.tags.length > 0 && <div className="mt-4 flex flex-wrap gap-x-2 gap-y-1 border-t border-[#f0e9e9] pt-3 text-[10px] text-[#76696b]">{faq.tags.slice(0, 3).map((tag) => <span key={tag}>#{tag}</span>)}</div>}
+              </article>
             ))}
           </div>
         )}
@@ -217,8 +212,9 @@ export function HelpdeskClientPage({
           {queries.map((q) => (
             <div
               key={q.id}
-              className="bg-white border border-slate-200 rounded-xl p-4"
+              className="group relative overflow-hidden rounded-xl border border-[#e7dfe0] bg-white p-4 shadow-[0_1px_3px_rgba(41,36,37,.035)] transition hover:border-[#cfb0b6] hover:shadow-[0_10px_24px_rgba(83,29,41,.08)]"
             >
+              <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-1 ${q.status === 'answered' ? 'bg-[#792c3b]' : 'bg-[#bd8b48]'}`} />
               <div className="flex items-center justify-between gap-2 mb-1.5">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-semibold text-slate-900">{q.title}</span>

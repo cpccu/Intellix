@@ -10,14 +10,16 @@ const SECTION_MARKS = [
   { matches: ['/lost-found', '/dashboard/lost-found'], name: 'lost-found', Icon: Compass },
 ] as const;
 
-export function SectionWatermark() {
+export function SectionWatermark({ section: requestedSection }: { section?: 'clubs' | 'resources' | 'helpdesk' | 'lost-found' }) {
   const pathname = usePathname();
-  const section = SECTION_MARKS.find(({ matches }) => matches.some((match) => pathname === match || pathname.startsWith(`${match}/`)));
+  const section = requestedSection
+    ? SECTION_MARKS.find(({ name }) => name === requestedSection)
+    : SECTION_MARKS.find(({ matches }) => matches.some((match) => pathname === match || pathname.startsWith(`${match}/`)));
   const Icon = section?.Icon ?? GraduationCap;
   const name = section?.name ?? 'learning';
 
   return (
-    <div className="section-watermark" data-section={name} aria-hidden="true">
+    <aside className="section-watermark" data-section={name} aria-label={`${name.replace('-', ' ')} tip`}>
       <svg className="section-watermark__orbit" viewBox="0 0 360 360" fill="none">
         <circle cx="180" cy="180" r="142" />
         <ellipse cx="180" cy="180" rx="155" ry="69" transform="rotate(-34 180 180)" />
@@ -37,6 +39,9 @@ export function SectionWatermark() {
       </div>
       <Sparkles className="section-watermark__sparkle section-watermark__sparkle--left" strokeWidth={1.4} />
       <Sparkles className="section-watermark__sparkle section-watermark__sparkle--right" strokeWidth={1.4} />
-    </div>
+      <p className="section-watermark__message">
+        {name === 'clubs' ? 'Find your next campus thing.' : name === 'resources' ? 'Your next study win starts here.' : name === 'helpdesk' ? 'Quick answers, less campus confusion.' : name === 'lost-found' ? 'Small clues help things find their way home.' : 'Make campus life your own.'}
+      </p>
+    </aside>
   );
 }

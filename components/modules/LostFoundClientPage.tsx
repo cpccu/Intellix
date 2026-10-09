@@ -20,6 +20,7 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Tabs } from '@/components/ui/Tabs';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { SectionWatermark } from '@/components/modules/SectionWatermark';
 import { PageIntro } from '@/components/ui/PageIntro';
 import { PackageSearch } from 'lucide-react';
 
@@ -249,7 +250,7 @@ export function LostFoundClientPage({
   };
 
   return (
-    <div className="mx-auto max-w-[1320px] space-y-6">
+    <div className="section-page section-page--lost-found mx-auto max-w-[1680px] space-y-6">
       <PageIntro
         icon={<PackageSearch size={19} />}
         kicker="Campus community board"
@@ -296,12 +297,13 @@ export function LostFoundClientPage({
 
       {/* ════════ TAB 1: LOST & FOUND ═══════════════════════ */}
       {activeTab === 'lost_found' && (
-        <div className="grid items-start gap-5 xl:grid-cols-[250px_minmax(0,1fr)]">
+        <div className="grid min-w-0 items-start gap-5 xl:grid-cols-[minmax(210px,250px)_minmax(0,1fr)]">
           {/* Filter Bar */}
-          <aside className="space-y-4 rounded-2xl border border-blue-100/10 bg-[#101a37]/70 p-3 sm:p-4">
+          <div className="min-w-0">
+          <aside className="space-y-4 rounded-2xl border border-[#e3e8df] bg-white p-3 sm:p-4">
             <div className="space-y-2">
               <p className="px-1 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Listing type</p>
-              <div className="flex w-full flex-wrap gap-1 rounded-xl border border-blue-100/10 bg-[#0a1430]/70 p-1">
+              <div className="flex w-full flex-wrap gap-1 rounded-xl border border-[#e7e1e0] bg-[#f7f5f4] p-1">
                 {(['all', 'lost', 'found'] as const).map((t) => (
                   <button
                     key={t}
@@ -309,8 +311,8 @@ export function LostFoundClientPage({
                     onClick={() => setTypeFilter(t)}
                     className={`px-3 py-1 rounded-md text-xs font-semibold capitalize cursor-pointer transition-colors ${
                       typeFilter === t
-                        ? 'bg-blue-400/15 text-sky-100 shadow-xs ring-1 ring-blue-200/15'
-                        : 'text-slate-500 hover:text-white'
+                        ? t === 'lost' ? 'bg-[#792c3b] !text-white shadow-xs ring-1 ring-[#792c3b]' : t === 'found' ? 'bg-[#315d4a] !text-white shadow-xs ring-1 ring-[#315d4a]' : 'bg-[#51484a] !text-white shadow-xs ring-1 ring-[#51484a]'
+                        : '!text-[#58645a] hover:bg-[#fbf5f5] hover:!text-[#252b27]'
                     }`}
                   >
                     {t === 'all' ? 'All Items' : t}
@@ -324,7 +326,7 @@ export function LostFoundClientPage({
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value as 'all' | LostFoundCategory)}
-                className="w-full rounded-xl border border-blue-100/10 bg-[#0a1430]/80 px-3 py-2.5 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-400/40"
+                className="w-full rounded-xl border border-[#e3e8df] bg-white px-3 py-2.5 text-xs text-[#292425] focus:outline-none focus:ring-2 focus:ring-[#792c3b]/20"
               >
                 <option value="all">All Categories</option>
                 <option value="electronics">Electronics & Gadgets</option>
@@ -345,12 +347,22 @@ export function LostFoundClientPage({
                 className="py-2.5 text-xs"
               />
             </div>
-            <div className="hidden rounded-xl border border-blue-100/10 bg-[#0a1430]/60 p-3 lg:block"><p className="text-[10px] font-semibold text-slate-300">Campus board</p><p className="mt-1 text-[10px] leading-relaxed text-slate-500">Listings are shared with the campus community. Use the type and category controls to narrow what you see.</p></div>
+            <div className="hidden rounded-xl border border-[#e7e1e0] bg-[#fcfbfa] p-3 lg:block"><p className="text-[10px] font-semibold text-[#292425]">Campus board</p><p className="mt-1 text-[10px] leading-relaxed text-[#5f5556]">Listings are shared with the campus community. Use the type and category controls to narrow what you see.</p></div>
           </aside>
+          <div className="hidden min-h-[390px] items-center justify-center xl:flex">
+            <SectionWatermark section="lost-found" />
+          </div>
+          </div>
 
           {/* Items Grid */}
           <div className="min-w-0 space-y-3">
-          <div className="flex items-end justify-between border-b border-blue-100/10 pb-3"><div><p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Community board</p><p className="mt-1 text-sm font-semibold text-slate-100">{filteredItems.length} matching listings</p></div><span className="text-[10px] text-slate-500">Newest first</span></div>
+          <div className="flex flex-wrap items-end justify-between gap-3 border-b border-blue-100/10 pb-3">
+            <div><p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">Community board</p><p className="mt-1 text-sm font-semibold text-slate-100">{filteredItems.length} matching listings</p></div>
+            <div className="flex items-center gap-2" aria-label="Listing type key">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#f8edef] px-2.5 py-1 text-[10px] font-bold text-[#792c3b]"><span className="h-1.5 w-1.5 rounded-full bg-[#a51f37]" /> Lost <span className="font-medium">{filteredItems.filter((item) => item.item_type === 'lost').length}</span></span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#eaf3ec] px-2.5 py-1 text-[10px] font-bold text-[#315d4a]"><span className="h-1.5 w-1.5 rounded-full bg-[#4f8661]" /> Found <span className="font-medium">{filteredItems.filter((item) => item.item_type === 'found').length}</span></span>
+            </div>
+          </div>
           <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
             {filteredItems.map((item) => {
               const isFound = item.item_type === 'found';
@@ -359,46 +371,48 @@ export function LostFoundClientPage({
               return (
                 <div
                   key={item.id}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-blue-100/10 bg-[#101a37]/80 p-5 shadow-[0_12px_34px_rgba(2,7,24,.12)] transition hover:-translate-y-0.5 hover:border-blue-200/25"
+                  className={`group relative flex flex-col justify-between overflow-hidden rounded-xl border p-5 shadow-[0_1px_3px_rgba(41,36,37,.035)] transition-all hover:-translate-y-1 hover:shadow-[0_14px_30px_rgba(83,29,41,.10)] ${isFound ? 'border-[#cbdccf] bg-[#fbfdfb] hover:border-[#8eb49a]' : 'border-[#ead0d5] bg-[#fffafa] hover:border-[#cf929c]'}`}
                 >
+                  <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-1.5 ${isFound ? 'bg-gradient-to-b from-[#315d4a] to-[#8bb69a]' : 'bg-gradient-to-b from-[#792c3b] to-[#ce8a96]'}`} />
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <Badge variant={isFound ? 'info' : 'warning'} size="sm">
-                        {isFound ? '🔍 FOUND' : '⚠️ LOST'}
-                      </Badge>
-                      <Badge variant={isClaimed ? 'success' : 'outline'} size="sm">
-                        {isClaimed ? '✓ Claimed' : 'Open'}
-                      </Badge>
+                    <div className="mb-4 flex items-center justify-between gap-2">
+                      <span className={`inline-flex items-center gap-2 rounded-md px-2.5 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.13em] ${isFound ? 'bg-[#eaf3ec] text-[#315d4a]' : 'bg-[#f8edef] text-[#792c3b]'}`}>
+                        <PackageSearch size={14} /> {isFound ? 'Found · help return' : 'Lost · owner looking'}
+                      </span>
+                      <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[10px] font-bold ${isClaimed ? 'bg-[#f0eeee] text-[#5f5556]' : isFound ? 'bg-[#eaf3ec] text-[#315d4a]' : 'bg-[#f8edef] text-[#792c3b]'}`}>
+                        <span className={`h-1.5 w-1.5 rounded-full ${isClaimed ? 'bg-[#879087]' : isFound ? 'bg-[#4f8661]' : 'bg-[#a51f37]'}`} />
+                        {isClaimed ? 'Resolved' : isFound ? 'Waiting for owner' : 'Needs recovery'}
+                      </span>
                     </div>
 
-                    <h3 className="mb-1 text-sm font-semibold text-slate-100 line-clamp-2">
+                    <h3 className={`mb-1.5 text-base font-bold leading-snug text-slate-100 line-clamp-2 transition-colors ${isFound ? 'group-hover:text-[#315d4a]' : 'group-hover:text-[#792c3b]'}`}>
                       {item.title}
                     </h3>
-                    <p className="text-xs text-slate-600 mb-3 line-clamp-3 leading-relaxed">
+                    <p className="mb-4 line-clamp-3 text-[13px] leading-relaxed text-slate-600">
                       {item.description}
                     </p>
                   </div>
 
-                  <div className="space-y-2 pt-3 border-t border-slate-100 text-xs text-slate-500">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-slate-400">📍 Location:</span>
+                  <div className={`space-y-2.5 rounded-lg p-3 text-xs text-slate-500 ${isFound ? 'bg-[#f1f7f2]' : 'bg-[#fbf1f2]'}`}>
+                    <div className="flex items-start gap-2">
+                      <span className={`shrink-0 ${isFound ? 'text-[#315d4a]' : 'text-[#792c3b]'}`}>📍</span>
                       <span className="font-medium text-slate-700">{item.location}</span>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-slate-400">📞 Contact:</span>
-                      <span className="font-medium text-slate-700 truncate">{item.contact_info}</span>
+                    <div className="flex items-start gap-2 border-t border-[#ece5e4] pt-2.5">
+                      <span className={`shrink-0 ${isFound ? 'text-[#315d4a]' : 'text-[#792c3b]'}`}>↗</span>
+                      <span className="min-w-0 truncate font-medium text-slate-700">{item.contact_info}</span>
                     </div>
 
                     {!isClaimed && (
-                      <div className="pt-2">
+                      <div className="pt-1">
                         <Button
                           type="button"
                           onClick={() => handleClaim(item.id)}
-                          variant="outline"
+                          variant="primary"
                           size="sm"
-                          className="w-full"
+                          className="w-full justify-between"
                         >
-                          Mark as Claimed / Recovered
+                          {isFound ? 'I am the owner — claim item' : 'Item recovered — close listing'} <span aria-hidden="true">→</span>
                         </Button>
                       </div>
                     )}
@@ -434,7 +448,7 @@ export function LostFoundClientPage({
       {/* ════════ TAB 2: COMPLAINT BOX ══════════════════════ */}
       {activeTab === 'complaints' && (
         <div className="grid items-start gap-5 lg:grid-cols-[minmax(280px,.8fr)_minmax(0,1.2fr)]">
-          <aside className="rounded-2xl border border-blue-100/10 bg-[#101a37]/75 p-4 sm:p-5">
+          <aside className="rounded-2xl border border-[#e3e8df] bg-white p-4 sm:p-5">
           {/* Tracking Card */}
           <div>
             <h3 className="text-sm font-semibold text-slate-900 mb-1">
@@ -522,8 +536,9 @@ export function LostFoundClientPage({
               {complaints.map((c) => (
                 <div
                   key={c.id}
-                  className="rounded-2xl border border-blue-100/10 bg-[#101a37]/75 p-5 shadow-[0_12px_34px_rgba(2,7,24,.12)] space-y-2 hover:border-blue-200/25 transition-colors"
+                  className="group relative overflow-hidden rounded-xl border border-[#e7dfe0] bg-white p-5 pl-6 shadow-[0_1px_3px_rgba(41,36,37,.035)] transition hover:-translate-y-0.5 hover:border-[#cfb0b6] hover:shadow-[0_10px_24px_rgba(83,29,41,.08)] space-y-2"
                 >
+                  <span aria-hidden="true" className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-[#792c3b] to-[#ead3d8]" />
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-slate-900 text-sm">{c.title}</span>

@@ -25,7 +25,7 @@ export function ClubCard({ club }: Props) {
           className="w-10 h-10 rounded-lg object-cover border border-slate-100"
         />
       ) : (
-        <div className="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-lg bg-[#7b2435] flex items-center justify-center">
           <span className="text-white text-xs font-bold">{getInitials(club.name)}</span>
         </div>
       )}
