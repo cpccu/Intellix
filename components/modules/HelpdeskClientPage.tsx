@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo, useState, useTransition } from 'react';
+import { useSearchParams } from 'next/navigation';
 import type { FAQItem, HelpdeskCategory, HelpdeskQuery } from '@/types';
 import { submitHelpdeskQuery } from '@/lib/actions/helpdesk.actions';
 import { createDemoId, readDemoRecords, useDemoRecords, writeDemoRecords } from '@/lib/demo-storage';
@@ -42,8 +43,12 @@ export function HelpdeskClientPage({
   initialQueries,
   isGuest,
 }: HelpdeskClientPageProps) {
+  const searchParams = useSearchParams();
+  const routeSearch = searchParams.get('search') ?? '';
   const [activeCategory, setActiveCategory] = useState<HelpdeskCategory | 'all'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [localSearchQuery, setLocalSearchQuery] = useState<{ route: string; value: string } | null>(null);
+  const searchQuery = localSearchQuery?.route === routeSearch ? localSearchQuery.value : routeSearch;
+  const setSearchQuery = (value: string) => setLocalSearchQuery({ route: routeSearch, value });
   const [submittedQueries, setSubmittedQueries] = useState<HelpdeskQuery[]>([]);
   const demoQueries = useDemoRecords<HelpdeskQuery>('campusos-demo-helpdesk');
   const queries = useMemo(() => {

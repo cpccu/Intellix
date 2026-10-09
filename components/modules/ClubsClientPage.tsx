@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import type { Club, ClubActivity, EventWithClub, SessionUser } from '@/types';
 import { EventCard } from '@/components/modules/EventCard';
 import { ClubActivitiesFeed } from '@/components/modules/ClubActivitiesFeed';
@@ -25,11 +26,15 @@ export function ClubsClientPage({
   activities,
   user,
 }: ClubsClientPageProps) {
+  const searchParams = useSearchParams();
+  const routeSearch = searchParams.get('search') ?? '';
   const [activeTab, setActiveTab] = useState<'events' | 'clubs' | 'activities'>('events');
   const [eventFilter, setEventFilter] = useState<'all' | 'upcoming' | 'ongoing' | 'completed'>('all');
   const [selectedClubId, setSelectedClubId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [search, setSearch] = useState('');
+  const [localSearch, setLocalSearch] = useState<{ route: string; value: string } | null>(null);
+  const search = localSearch?.route === routeSearch ? localSearch.value : routeSearch;
+  const setSearch = (value: string) => setLocalSearch({ route: routeSearch, value });
 
   const filteredEvents = events.filter((e) => {
     const statusNorm = (e.status || 'upcoming').toLowerCase();

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { Bell, BookOpen, CalendarDays, CircleHelp, LayoutDashboard, LogOut, Search } from 'lucide-react';
 import { signOut } from '@/lib/actions/auth.actions';
+import { searchCampus, type CampusSearchResult } from '@/lib/actions/search.actions';
 import type { SessionUser } from '@/types';
 
 interface Props {
@@ -24,7 +25,12 @@ export function DashboardHeader({ user }: Props) {
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchState, setSearchState] = useState<{ query: string; results: CampusSearchResult[]; loading: boolean } | null>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!notificationsOpen) return;
@@ -41,6 +47,59 @@ export function DashboardHeader({ user }: Props) {
       document.removeEventListener('keydown', dismissOnEscape);
     };
   }, [notificationsOpen]);
+
+  useEffect(() => {
+    if (!searchOpen) return;
+    const dismissOnOutsideClick = (event: PointerEvent) => {
+      if (!searchRef.current?.contains(event.target as Node)) setSearchOpen(false);
+    };
+    const dismissOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSearchOpen(false);
+    };
+    document.addEventListener('pointerdown', dismissOnOutsideClick);
+    document.addEventListener('keydown', dismissOnEscape);
+    searchInputRef.current?.focus();
+    return () => {
+      document.removeEventListener('pointerdown', dismissOnOutsideClick);
+      document.removeEventListener('keydown', dismissOnEscape);
+    };
+  }, [searchOpen]);
+
+  useEffect(() => {
+    const openSearchShortcut = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        setNotificationsOpen(false);
+        setSearchOpen(true);
+      }
+    };
+    document.addEventListener('keydown', openSearchShortcut);
+    return () => document.removeEventListener('keydown', openSearchShortcut);
+  }, []);
+
+  useEffect(() => {
+    const query = searchQuery.trim();
+    if (!searchOpen || query.length < 2) return;
+
+    let canceled = false;
+    const timeout = window.setTimeout(async () => {
+      setSearchState({ query, results: [], loading: true });
+      try {
+        const results = await searchCampus(query);
+        if (!canceled) setSearchState({ query, results, loading: false });
+      } catch {
+        if (!canceled) setSearchState({ query, results: [], loading: false });
+      }
+    }, 250);
+    return () => {
+      canceled = true;
+      window.clearTimeout(timeout);
+    };
+  }, [searchOpen, searchQuery]);
+
+  const currentSearchState = searchState?.query === searchQuery.trim() ? searchState : null;
+  const searchResults = currentSearchState?.results ?? [];
+  const searchLoading = currentSearchState?.loading ?? false;
 
   const handleSignOut = () => {
     startTransition(async () => {
@@ -74,10 +133,32 @@ export function DashboardHeader({ user }: Props) {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <div className="hidden w-44 items-center gap-2 rounded-xl border border-[#e3e8df] bg-[#f7f8f5] px-2.5 py-2 text-[#879087] xl:flex">
-            <Search size={14} />
-            <span className="text-[10px]">Search campus</span>
-            <kbd className="ml-auto rounded border border-[#eadfdd] bg-white px-1 text-[9px] text-[#938588]">⌘ K</kbd>
+          <div ref={searchRef} className="relative hidden xl:block">
+            <button type="button" aria-label="Search campus" aria-expanded={searchOpen} aria-controls="campus-search-results" onClick={() => { setNotificationsOpen(false); setSearchOpen((open) => !open); }} className={`flex w-44 items-center gap-2 rounded-xl border px-2.5 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#792c3b]/30 ${searchOpen ? 'border-[#ead3d8] bg-[#fdf8f8] text-[#792c3b]' : 'border-[#e3e8df] bg-[#f7f8f5] text-[#68736a] hover:border-[#d7c3c7] hover:bg-white'}`}>
+              <Search size={14} />
+              <span className="text-[10px]">Search campus</span>
+              <kbd className="ml-auto rounded border border-[#eadfdd] bg-white px-1 text-[9px] text-[#76696b]">⌘ K</kbd>
+            </button>
+            {searchOpen && (
+              <div id="campus-search-results" className="absolute right-0 top-full z-50 mt-2 w-[min(26rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-[#e3e8df] bg-white shadow-[0_16px_42px_rgba(37,43,39,.16)]">
+                <label className="flex items-center gap-2 border-b border-[#edf0eb] px-4 py-3 text-[#68736a]">
+                  <Search size={16} />
+                  <input ref={searchInputRef} type="search" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search events, resources, answers…" className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[#252b27] outline-none placeholder:text-[#9aa39b]" />
+                  {searchLoading && <span className="text-[10px] text-[#78847a]">Searching…</span>}
+                </label>
+                <div className="max-h-[min(60vh,24rem)] overflow-y-auto p-2">
+                  {searchQuery.trim().length < 2 ? (
+                    <p className="px-3 py-6 text-center text-xs text-[#78847a]">Type at least 2 characters to search campus.</p>
+                  ) : searchLoading ? (
+                    <p className="px-3 py-6 text-center text-xs text-[#78847a]">Looking across campus…</p>
+                  ) : searchResults.length ? (
+                    <ul className="space-y-1">{searchResults.map((result) => <li key={result.id}><Link href={result.href} onClick={() => setSearchOpen(false)} className="block rounded-xl px-3 py-2.5 transition-colors hover:bg-[#fbf5f5] focus-visible:bg-[#fbf5f5] focus-visible:outline-none"><span className="block truncate text-xs font-semibold text-[#30292a]">{result.title}</span><span className="mt-1 flex items-center justify-between gap-3"><span className="truncate text-[10px] text-[#6e7770]">{result.detail}</span><span className="shrink-0 rounded-full bg-[#f5e9eb] px-2 py-0.5 text-[9px] font-semibold text-[#792c3b]">{result.section}</span></span></Link></li>)}</ul>
+                  ) : (
+                    <p className="px-3 py-6 text-center text-xs text-[#78847a]">No campus results found. Try another keyword.</p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           <div ref={notificationRef} className="relative">
             <button type="button" aria-label="Notifications" aria-expanded={notificationsOpen} aria-controls="campus-notifications" onClick={() => setNotificationsOpen((open) => !open)} className={`relative flex h-9 w-9 items-center justify-center rounded-xl border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#792c3b]/30 ${notificationsOpen ? 'border-[#ead3d8] bg-[#f5e9eb] text-[#792c3b]' : 'border-[#e3e8df] bg-white text-[#68736a] hover:bg-[#f4f6f1] hover:text-[#792c3b]'}`}>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo, useState, useTransition } from 'react';
+import { useSearchParams } from 'next/navigation';
 import type {
   ComplaintItem,
   LostFoundCategory,
@@ -37,6 +38,8 @@ export function LostFoundClientPage({
   initialComplaints,
   isGuest,
 }: LostFoundClientPageProps) {
+  const searchParams = useSearchParams();
+  const routeSearch = searchParams.get('search') ?? '';
   const [activeTab, setActiveTab] = useState<'lost_found' | 'complaints'>('lost_found');
   const [createdItems, setCreatedItems] = useState<LostFoundItem[]>([]);
   const [createdComplaints, setCreatedComplaints] = useState<ComplaintItem[]>([]);
@@ -58,7 +61,9 @@ export function LostFoundClientPage({
   // Lost & Found filters
   const [typeFilter, setTypeFilter] = useState<'all' | LostFoundType>('all');
   const [categoryFilter, setCategoryFilter] = useState<'all' | LostFoundCategory>('all');
-  const [searchFilter, setSearchFilter] = useState('');
+  const [localSearchFilter, setLocalSearchFilter] = useState<{ route: string; value: string } | null>(null);
+  const searchFilter = localSearchFilter?.route === routeSearch ? localSearchFilter.value : routeSearch;
+  const setSearchFilter = (value: string) => setLocalSearchFilter({ route: routeSearch, value });
 
   // Modals
   const [showItemModal, setShowItemModal] = useState(false);

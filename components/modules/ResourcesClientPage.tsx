@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { ResourceRow } from '@/components/modules/ResourceRow';
 import { SectionWatermark } from '@/components/modules/SectionWatermark';
 import { PageIntro } from '@/components/ui/PageIntro';
@@ -20,7 +21,11 @@ interface Props {
 }
 
 export function ResourcesClientPage({ initialResources }: Props) {
-  const [query, setQuery] = useState('');
+  const searchParams = useSearchParams();
+  const routeSearch = searchParams.get('search') ?? '';
+  const [localQuery, setLocalQuery] = useState<{ route: string; value: string } | null>(null);
+  const query = localQuery?.route === routeSearch ? localQuery.value : routeSearch;
+  const setQuery = (value: string) => setLocalQuery({ route: routeSearch, value });
   const [activeCategory, setActiveCategory] = useState<'all' | ResourceCategory>('all');
 
   const filtered = useMemo(() => {
