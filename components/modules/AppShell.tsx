@@ -9,7 +9,7 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
   if (!user) redirect('/login');
 
   return (
-    <div className="min-h-[100dvh] bg-[#f6f7f3] lg:grid lg:grid-cols-[248px_minmax(0,1fr)] lg:items-start">
+    <div className="min-h-[100dvh] bg-[#f6f7f3]">
       <DashboardSidebar />
       <div className="min-w-0">
         <DashboardHeader user={user} />

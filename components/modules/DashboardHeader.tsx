@@ -1,7 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { Bell, BookOpen, CalendarDays, CircleHelp, LayoutDashboard, LogOut, Search } from 'lucide-react';
 import { signOut } from '@/lib/actions/auth.actions';
 import type { SessionUser } from '@/types';
@@ -22,6 +23,24 @@ export function DashboardHeader({ user }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const notificationRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!notificationsOpen) return;
+    const dismissOnOutsideClick = (event: PointerEvent) => {
+      if (!notificationRef.current?.contains(event.target as Node)) setNotificationsOpen(false);
+    };
+    const dismissOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setNotificationsOpen(false);
+    };
+    document.addEventListener('pointerdown', dismissOnOutsideClick);
+    document.addEventListener('keydown', dismissOnEscape);
+    return () => {
+      document.removeEventListener('pointerdown', dismissOnOutsideClick);
+      document.removeEventListener('keydown', dismissOnEscape);
+    };
+  }, [notificationsOpen]);
 
   const handleSignOut = () => {
     startTransition(async () => {
@@ -36,10 +55,23 @@ export function DashboardHeader({ user }: Props) {
 
   return (
     <header className="sticky top-0 z-30 border-b border-[#e3e8df] bg-white px-4 sm:px-6 xl:px-8">
-      <div className="mx-auto flex min-h-[68px] max-w-[1600px] items-center justify-between gap-4">
-        <div className="flex min-w-0 items-center gap-3 lg:hidden"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#792c3b] text-[10px] font-black text-white">CU</span><span className="truncate text-sm font-extrabold tracking-tight text-[#252b27]">CampusOS</span></div>
-        <div className="hidden min-w-0 lg:block"><p className="text-[9px] font-bold uppercase tracking-[0.16em] text-[#7b887d]">City University · Student community</p><p className="mt-0.5 text-sm font-bold text-[#252b27]">{NAV_ITEMS.find(({ href, alias }) => pathname === href || pathname === alias || pathname.startsWith(href) || Boolean(alias && pathname.startsWith(alias)))?.label ?? 'Campus overview'}</p></div>
-        <div className="hidden flex-1 lg:block" aria-hidden="true" />
+      <div className="mx-auto flex min-h-[68px] max-w-[1760px] items-center justify-between gap-3">
+        <Link href="/dashboard" className="flex min-w-0 shrink-0 items-center gap-2.5" aria-label="CampusOS home">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#792c3b] text-[10px] font-black text-white">CU</span>
+          <span className="min-w-0"><span className="block truncate text-sm font-extrabold tracking-tight text-[#252b27]">CampusOS</span><span className="hidden text-[8px] font-semibold uppercase tracking-[0.14em] text-[#78847a] sm:block">City University</span></span>
+        </Link>
+
+        <nav aria-label="Primary navigation" className="hidden min-w-0 flex-1 items-center justify-start gap-1 overflow-x-auto lg:flex xl:justify-center">
+          {NAV_ITEMS.map(({ href, alias, label, icon: Icon }) => {
+            const active = pathname === href || pathname === alias || (href !== '/dashboard' && pathname.startsWith(href)) || Boolean(alias && pathname.startsWith(alias));
+            return (
+              <Link key={href} href={href} aria-current={active ? 'page' : undefined}
+                className={`inline-flex shrink-0 items-center gap-2 rounded-xl px-2.5 py-2.5 text-[11px] font-semibold transition-colors xl:px-3 xl:text-xs ${active ? 'bg-[#f5e9eb] text-[#792c3b] ring-1 ring-[#ead3d8]' : 'text-[#68736a] hover:bg-[#f7f8f5] hover:text-[#252b27]'}`}>
+                <Icon size={15} strokeWidth={1.8} /><span>{label}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <div className="hidden w-44 items-center gap-2 rounded-xl border border-[#e3e8df] bg-[#f7f8f5] px-2.5 py-2 text-[#879087] xl:flex">
@@ -47,10 +79,24 @@ export function DashboardHeader({ user }: Props) {
             <span className="text-[10px]">Search campus</span>
             <kbd className="ml-auto rounded border border-[#eadfdd] bg-white px-1 text-[9px] text-[#938588]">⌘ K</kbd>
           </div>
-          <button type="button" aria-label="Notifications" className="relative hidden h-9 w-9 items-center justify-center rounded-xl border border-[#e3e8df] bg-white text-[#68736a] transition-colors hover:bg-[#f4f6f1] hover:text-[#792c3b] sm:flex">
-            <Bell size={15} />
-            <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#9b3e4d] ring-2 ring-white" />
-          </button>
+          <div ref={notificationRef} className="relative">
+            <button type="button" aria-label="Notifications" aria-expanded={notificationsOpen} aria-controls="campus-notifications" onClick={() => setNotificationsOpen((open) => !open)} className={`relative flex h-9 w-9 items-center justify-center rounded-xl border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#792c3b]/30 ${notificationsOpen ? 'border-[#ead3d8] bg-[#f5e9eb] text-[#792c3b]' : 'border-[#e3e8df] bg-white text-[#68736a] hover:bg-[#f4f6f1] hover:text-[#792c3b]'}`}>
+              <Bell size={15} />
+            </button>
+            {notificationsOpen && (
+              <section id="campus-notifications" aria-label="Notifications" className="absolute right-0 top-full z-50 mt-2 w-[min(20rem,calc(100vw-2rem))] rounded-2xl border border-[#e3e8df] bg-white p-4 shadow-[0_16px_42px_rgba(37,43,39,.16)]">
+                <div className="flex items-center justify-between border-b border-[#edf0eb] pb-3">
+                  <div><h2 className="text-sm font-bold text-[#252b27]">Notifications</h2><p className="mt-0.5 text-[10px] text-[#78847a]">Campus updates</p></div>
+                  <span className="rounded-full bg-[#f2f5ef] px-2 py-1 text-[9px] font-semibold text-[#68736a]">All caught up</span>
+                </div>
+                <div className="flex flex-col items-center px-3 py-7 text-center">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#f5e9eb] text-[#792c3b]"><Bell size={18} strokeWidth={1.8} /></span>
+                  <p className="mt-3 text-xs font-semibold text-[#3c3435]">You’re all caught up</p>
+                  <p className="mt-1 max-w-[15rem] text-[10px] leading-relaxed text-[#6e7770]">New campus announcements and activity updates will appear here.</p>
+                </div>
+              </section>
+            )}
+          </div>
           {user.isGuest && <span className="hidden rounded-full border border-[#dce8dd] bg-[#eaf1eb] px-2.5 py-1 text-[10px] font-semibold text-[#315d4a] sm:inline-flex">Demo account</span>}
           <div className="flex items-center gap-2">
             {user.profile?.avatar_url ? (
